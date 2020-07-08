@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SpeechRecognition</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="js/all.js">
+    <link rel="stylesheet" href="css/all.css">
+</head>
+
+<body>
+    <!-- Input area -->
+    <section>
+        <h1>Speech Recognition</h1>
+        <div class="wave"><img src="giphy.gif" alt=""></div>
+        <div class="wrapper">
+            <div id="speechToText" onclick="record()"><i class="fas fa-microphone"></i></div>
+            <select name="" id="langs">
+                <option value="en-GB" selected>English</option>
+                <option value="ar-SA">Arabian</option>
+                <option value="tr-TR">Turkish</option>
+                <option value="ru-RU">Russian</option>
+            </select>
+        </div>
+        <div class="textarea">
+            <div class="output">Click to the button ,and speak</div>
+        </div>
+        <footer>
+            Developed by parahatreis
+        </footer>
+    </section>
+
+
+
+
+
+    <!-- Below is the script for voice recognition and conversion to text-->
+    <script>
+        const select = document.getElementById('langs');
+        
+        
+        function record() {
+            var recognition = new webkitSpeechRecognition();
+            var options = select.children;
+            var language = '';
+
+            
+            for (var x = 0; x < options.length; x++) {
+                if (options[x].selected) {
+                    console.log(options[x])
+                    language = options[x].value
+                }
+            }
+            recognition.lang = language;
+
+            recognition.onresult = function (event) {
+                console.log(event);
+                var voice = event.results[0][0].transcript;
+                document.querySelector('.output').innerHTML = voice;
+
+                if(voice.toLowerCase() == 'open google'){
+                    window.open('https://google.com' ,'_blank')
+                }
+                if(voice.includes('search')){
+                    var c = voice.split(' ');
+                    var myVar = c.slice(1,c.length);
+                    var search = myVar.join(' ');
+                    console.log(search)
+                    window.open('https://www.google.com/search?q='+search+'&oq='+search+'&aqs=chrome..69i57.10025j0j9&sourceid=chrome&ie=UTF-8'
+                    ,'_blank')
+
+                }
+                if(voice.toLowerCase() == 'what time is it'){
+                    var today = new Date();
+                    var time = today.getHours() + ":" + today.getMinutes();
+                    document.querySelector('.output').innerHTML = time;
+                }
+            }
+
+            
+            recognition.onaudiostart = function(event){
+                document.querySelector('.wave').style.display = 'grid';
+            }
+            recognition.onaudioend = function(event){
+                console.log('ended')
+                document.querySelector('.wave').style.display = 'none';
+            } 
+            recognition.start();
+
+        }
+        
+    </script>
+</body>
+
+</html>
